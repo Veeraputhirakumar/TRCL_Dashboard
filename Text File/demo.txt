@@ -1,0 +1,86 @@
+import sys
+from PyQt6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget
+from PyQt6.QtWebEngineWidgets import QWebEngineView
+from PyQt6.QtCore import QUrl
+import threading
+from dash import Dash, dcc, html
+import plotly.graph_objs as go
+import pandas as pd
+
+# Load your dataset
+dataset_path = r'D:\RC Ld\oly.csv'
+df = pd.read_csv(dataset_path)
+
+def run_dash():
+    app = Dash(__name__)
+    app.layout = html.Div(children=[
+        html.H1(children='Country vs Gold and Total'),
+        html.Div(children=[
+            dcc.Graph(
+                id='country-gold-graph',
+                figure={
+                    'data': [
+                        go.Bar(
+                            x=df['Country'],
+                            y=df['Gold'],
+                            name='Gold'
+                        ),
+                        go.Scatter(
+                            x=df['Country'],
+                            y=[24] * len(df),  # Baseline value
+                            mode='lines',
+                            name='Baseline',
+                            line=dict(color='red', width=2, dash='dash')
+                        )
+                    ],
+                    'layout': go.Layout(
+                        title='Gold Medals by Country',
+                        xaxis={'title': 'Country'},
+                        yaxis={'title': 'Gold'},
+                        hovermode='closest'
+                    )
+                }
+            ),
+            dcc.Graph(
+                id='country-total-graph',
+                figure={
+                    'data': [
+                        go.Scatter(
+                            x=df['Country'],
+                            y=df['Total'],  # Assuming 'Total' column exists in the dataset
+                            mode='lines+markers',
+                            name='Total',
+                            line=dict(color='blue', width=2)
+                        )
+                    ],
+                    'layout': go.Layout(
+                        title='Total by Country',
+                        xaxis={'title': 'Country'},
+                        yaxis={'title': 'Total'},
+                        hovermode='closest'
+                    )
+                }
+            )
+        ], style={'display': 'flex', 'flex-direction': 'row'})
+    ])
+    app.run_server(host='192.168.3.35', port=8050, debug=True, use_reloader=False)
+
+class MainWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle('Dash in PyQt6')
+        self.setGeometry(100, 100, 1280, 800)
+        central_widget = QWidget(self)
+        self.setCentralWidget(central_widget)
+        layout = QVBoxLayout(central_widget)
+        self.webview = QWebEngineView()
+        layout.addWidget(self.webview)
+        self.webview.setUrl(QUrl('http://192.168.3.35:8050'))
+
+if __name__ == '__main__':
+    dash_thread = threading.Thread(target=run_dash)
+    dash_thread.start()
+    app = QApplication(sys.argv)
+    window = MainWindow()
+    window.show()
+    sys.exit(app.exec())
