@@ -14,7 +14,7 @@ def run_dash():
     app = Dash(__name__)
 
     app.layout = html.Div(children=[
-        html.H1(children='Run Hours vs Power Consumption', style={
+        html.H1(children='Energy Consumption', style={
                 'text-align': 'center', 'margin-bottom': '20px', 'font-weight': 'bold'}),
 
         # Main container for all inputs
@@ -27,7 +27,7 @@ def run_dash():
                     options=[
                         {'label': 'RawMill-1', 'value': 'RawMill-1'},
                         {'label': 'CoalMill-1', 'value': 'CoalMill-1'},
-                        {'label': 'KILNMill-1', 'value': 'KILNMill-1'},
+                        {'label': 'KILN-1', 'value': 'KILN-1'},
                         {'label': 'CementMill-1', 'value': 'CementMill-1'},
                     ],
                     placeholder="Select a Mill",
@@ -133,7 +133,7 @@ def run_dash():
             options = [{'label': 'CM', 'value': 'CM'},
                        {'label': 'CMF', 'value': 'CMF'},
                        {'label': 'Coal mill-Aux', 'value': 'Coal mill-Aux'}]
-        elif selected_mill == 'KILNMill-1':
+        elif selected_mill == 'KILN-1':
             options = [{'label': 'IDF', 'value': 'IDF'},
                        {'label': 'BHF', 'value': 'BHF'},
                        {'label': 'MD', 'value': 'MD'},
