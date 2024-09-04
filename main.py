@@ -217,10 +217,10 @@ def run_dash():
                     figure={
                         'data': [
                             go.Bar(
-                                x=[opt for opt in df.columns if opt in [
-                                    'RM', 'RMF', 'Sec. cla fan', 'Raw mill-Aux']],
-                                y=[filtered_df[opt].sum() for opt in [
-                                    'RM', 'RMF', 'Sec. cla fan', 'Raw mill-Aux']],
+                                x=[opt for opt in filtered_df.columns if opt in [
+                                    selected_option]],
+                                y=[filtered_df[opt].sum()
+                                   for opt in [selected_option]],
                                 marker_color='blue'
                             )
                         ],

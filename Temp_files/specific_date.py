@@ -3,17 +3,19 @@ import plotly.graph_objs as go
 import pandas as pd
 
 # Load your dataset
-dataset_path = r'D:\RC Ld\Dataset\UPDATED DATA.csv'
+dataset_path = r'D:\\Profession\\trcl\\TRCL_Dashboard\\Dataset\\UPDATED_DATA.csv'
 df = pd.read_csv(dataset_path)
 
 # Convert the Date column to datetime format
 df['Date'] = pd.to_datetime(df['Date'], format='%d-%m-%Y')
 
+
 def run_dash():
     app = Dash(__name__)
 
     app.layout = html.Div(children=[
-        html.H1(children='Run Hours vs Power Consumption', style={'text-align': 'center', 'margin-bottom': '20px', 'font-weight': 'bold'}),
+        html.H1(children='Run Hours vs Power Consumption', style={
+                'text-align': 'center', 'margin-bottom': '20px', 'font-weight': 'bold'}),
 
         # Main container for all inputs
         html.Div([
@@ -51,7 +53,8 @@ def run_dash():
         ], style={'display': 'flex', 'justify-content': 'center', 'align-items': 'center', 'gap': '20px'}),
 
         # Date Input Fields (initially hidden)
-        html.Div(id='date-input-container', style={'display': 'none', 'margin-top': '20px'}),
+        html.Div(id='date-input-container',
+                 style={'display': 'none', 'margin-top': '20px'}),
 
         # Container for the dynamic graph
         html.Div(id='graph-container', style={'margin-top': '20px'})
@@ -75,13 +78,20 @@ def run_dash():
     def display_date_inputs(selected_trend):
         if selected_trend == 'Specific Date':
             return html.Div([
-                html.Label('Day:', style={'font-weight': 'bold', 'margin-right': '10px'}),
-                dcc.Input(id='day-input', type='number', placeholder='DD', min=1, max=31, style={'margin-right': '20px'}),
-                html.Label('Month:', style={'font-weight': 'bold', 'margin-right': '10px'}),
-                dcc.Input(id='month-input', type='number', placeholder='MM', min=1, max=12, style={'margin-right': '20px'}),
-                html.Label('Year:', style={'font-weight': 'bold', 'margin-right': '10px'}),
-                dcc.Input(id='year-input', type='number', placeholder='YYYY', min=df['Date'].dt.year.min(), max=df['Date'].dt.year.max(), style={'margin-right': '20px'}),
-                html.Button('Submit', id='submit-date', n_clicks=0, style={'margin-left': '20px'})
+                html.Label('Day:', style={
+                           'font-weight': 'bold', 'margin-right': '10px'}),
+                dcc.Input(id='day-input', type='number', placeholder='DD',
+                          min=1, max=31, style={'margin-right': '20px'}),
+                html.Label('Month:', style={
+                           'font-weight': 'bold', 'margin-right': '10px'}),
+                dcc.Input(id='month-input', type='number', placeholder='MM',
+                          min=1, max=12, style={'margin-right': '20px'}),
+                html.Label('Year:', style={
+                           'font-weight': 'bold', 'margin-right': '10px'}),
+                dcc.Input(id='year-input', type='number', placeholder='YYYY', min=df['Date'].dt.year.min(
+                ), max=df['Date'].dt.year.max(), style={'margin-right': '20px'}),
+                html.Button('Submit', id='submit-date', n_clicks=0,
+                            style={'margin-left': '20px'})
             ], style={'display': 'flex', 'align-items': 'center'})
         return None
 
@@ -152,7 +162,8 @@ def run_dash():
                     figure={
                         'data': [
                             go.Bar(
-                                x=['IDF', 'BHF', 'MD', 'Cooler fans Clinker Tr.', 'Kiln-1-Aux'],
+                                x=['IDF', 'BHF', 'MD',
+                                    'Cooler fans Clinker Tr.', 'Kiln-1-Aux'],
                                 y=[
                                     filtered_df['IDF'].values[0],
                                     filtered_df['BHF'].values[0],
@@ -160,7 +171,8 @@ def run_dash():
                                     filtered_df['Cooler fans Clinker Tr.'].values[0],
                                     filtered_df['Kiln-1-Aux'].values[0]
                                 ],
-                                marker_color=['blue', 'green', 'red', 'purple', 'orange']
+                                marker_color=['blue', 'green',
+                                              'red', 'purple', 'orange']
                             )
                         ],
                         'layout': go.Layout(
@@ -198,6 +210,7 @@ def run_dash():
 
     # Run the server on localhost
     app.run_server(host='127.0.0.1', port=8050, debug=True, use_reloader=False)
+
 
 if __name__ == '__main__':
     run_dash()
